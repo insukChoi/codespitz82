@@ -1,4 +1,4 @@
-# codespitz82
+# codespitz82 (Kotlin JS project)
 Kotlin은 JavaScript를 타겟팅 할 수있는 기능을 제공합니다.
 
 Kotlin을 JavaScript로 변환하면됩니다. 현재 구현은 ECMAScript 5.1을 대상으로하지만 ECMAScript 2015를 대상으로하는 계획이 있습니다.
