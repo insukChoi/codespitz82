@@ -3,6 +3,7 @@ if (typeof kotlin === 'undefined') {
 }
 var app = function (_, Kotlin) {
   'use strict';
+  var $$importsForInline$$ = _.$$importsForInline$$ || (_.$$importsForInline$$ = {});
   var throwCCE = Kotlin.throwCCE;
   var Unit = Kotlin.kotlin.Unit;
   var replace = Kotlin.kotlin.text.replace_680rmw$;
@@ -10,10 +11,12 @@ var app = function (_, Kotlin) {
   var equals = Kotlin.equals;
   var split = Kotlin.kotlin.text.split_o64adg$;
   var isBlank = Kotlin.kotlin.text.isBlank_gw00vp$;
-  var println = Kotlin.kotlin.io.println_s8jyv4$;
   var StringBuilder_init = Kotlin.kotlin.text.StringBuilder_init_za3lpa$;
   var ensureNotNull = Kotlin.ensureNotNull;
   var Regex_init = Kotlin.kotlin.text.Regex_init_61zpoe$;
+  var println = Kotlin.kotlin.io.println_s8jyv4$;
+  var listOf = Kotlin.kotlin.collections.listOf_i5x0yv$;
+  var defineInlineFunction = Kotlin.defineInlineFunction;
   function app$lambda(it) {
     var tmp$, tmp$_0, tmp$_1;
     if ((Kotlin.isType(tmp$ = it, KeyboardEvent) ? tmp$ : throwCCE()).keyCode !== 13)
@@ -77,8 +80,6 @@ var app = function (_, Kotlin) {
   function calc(v) {
     var r = v;
     while (paren.containsMatchIn_6bul2c$(r)) {
-      println('--');
-      println('cycle = ' + r);
       var $receiver = r;
       var regex = paren;
       var replace_20wsma$result;
@@ -94,10 +95,7 @@ var app = function (_, Kotlin) {
         do {
           var foundMatch = ensureNotNull(match);
           sb.append_ezbsdh$($receiver, lastStart, foundMatch.range.start);
-          var tmp$ = sb.append_gw00v9$;
-          println('groupValues = ' + foundMatch.groupValues);
-          println('() = ' + foundMatch.groupValues.get_za3lpa$(1));
-          tmp$.call(sb, ex(foundMatch.groupValues.get_za3lpa$(1)).toString());
+          sb.append_gw00v9$(ex(foundMatch.groupValues.get_za3lpa$(1)).toString());
           lastStart = foundMatch.range.endInclusive + 1 | 0;
           match = foundMatch.next();
         }
@@ -109,13 +107,31 @@ var app = function (_, Kotlin) {
       }
        while (false);
       r = replace_20wsma$result;
-      println('to = ' + r);
     }
     return ex(r);
   }
+  function main$lambda(it) {
+    return it * 2 | 0;
+  }
   function main() {
     app();
+    println(pass(3, main$lambda));
+    var v = listOf(['a', 'b', 'c']);
+    var tmp$;
+    var i = v.size;
+    while ((tmp$ = i, i = tmp$ - 1 | 0, tmp$) > 0) {
+      println(v.get_za3lpa$(i));
+    }
   }
+  function pass(v, block) {
+    return block(v);
+  }
+  var reverseFor = defineInlineFunction('app.reverseFor_pejtha$', function (v, block) {
+    var tmp$;
+    var i = v.size;
+    while ((tmp$ = i, i = tmp$ - 1 | 0, tmp$) > 0)
+      block(v.get_za3lpa$(i));
+  });
   _.app = app;
   Object.defineProperty(_, 'cleanUp', {
     get: function () {
@@ -134,7 +150,10 @@ var app = function (_, Kotlin) {
   });
   _.ex_61zpoe$ = ex;
   _.calc_61zpoe$ = calc;
+  $$importsForInline$$.app = _;
   _.main = main;
+  _.pass_wc9gac$ = pass;
+  _.reverseFor_pejtha$ = reverseFor;
   cleanUp = Regex_init('[^.\\d-+*\\/]');
   multDiv = Regex_init('((?:\\+-)?[.\\d]+)([*\\/])((?:\\+-)?[.\\d]+)');
   paren = Regex_init('\\(([^()]*)\\)');
