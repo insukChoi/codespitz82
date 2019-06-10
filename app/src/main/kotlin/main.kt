@@ -2,7 +2,7 @@ fun main(){
     app()
     //println(pass(3){it * 2})
     //reverseFor(listOf("a", "b", "c"), ::println)
-    println(Test("a","b").run { a+b })
+    /*println(Test("a","b").run { a+b })
 
     println(MapTest().run {
         this["name"] = "insuk"
@@ -10,7 +10,10 @@ fun main(){
         this["firstName"] = "Choi"
         this["lastName"] = "insuk"
         "$name , $job , $fullName"
-    })
+    })*/
+
+    htmlBuilder()
+    testFetch()
 }
 
 class Test(val a:String, val b:String)

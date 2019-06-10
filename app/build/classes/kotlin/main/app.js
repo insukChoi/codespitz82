@@ -14,14 +14,35 @@ var app = function (_, Kotlin) {
   var StringBuilder_init = Kotlin.kotlin.text.StringBuilder_init_za3lpa$;
   var ensureNotNull = Kotlin.ensureNotNull;
   var Regex_init = Kotlin.kotlin.text.Regex_init_61zpoe$;
-  var println = Kotlin.kotlin.io.println_s8jyv4$;
-  var toString = Kotlin.toString;
   var Kind_CLASS = Kotlin.Kind.CLASS;
+  var toList = Kotlin.kotlin.collections.toList_abgq59$;
+  var joinToString = Kotlin.kotlin.collections.joinToString_fmv235$;
+  var println = Kotlin.kotlin.io.println_s8jyv4$;
+  var LinkedHashMap_init = Kotlin.kotlin.collections.LinkedHashMap_init_q3lmfv$;
+  var Kind_OBJECT = Kotlin.Kind.OBJECT;
+  var IntRange = Kotlin.kotlin.ranges.IntRange;
+  var collectionSizeOrDefault = Kotlin.kotlin.collections.collectionSizeOrDefault_ba2ldo$;
+  var ArrayList_init = Kotlin.kotlin.collections.ArrayList_init_ww73n8$;
+  var indexOf = Kotlin.kotlin.text.indexOf_8eortd$;
+  var contains = Kotlin.kotlin.text.contains_sgbm27$;
+  var ArrayList_init_0 = Kotlin.kotlin.collections.ArrayList_init_287e2$;
+  var trim = Kotlin.kotlin.text.trim_gw00vp$;
   var lazy = Kotlin.kotlin.lazy_klfg04$;
   var defineInlineFunction = Kotlin.defineInlineFunction;
-  var LinkedHashMap_init = Kotlin.kotlin.collections.LinkedHashMap_init_q3lmfv$;
   var Enum = Kotlin.kotlin.Enum;
   var throwISE = Kotlin.throwISE;
+  Body.prototype = Object.create(El.prototype);
+  Body.prototype.constructor = Body;
+  Div.prototype = Object.create(El.prototype);
+  Div.prototype.constructor = Div;
+  H2.prototype = Object.create(El.prototype);
+  H2.prototype.constructor = H2;
+  Canvas.prototype = Object.create(El.prototype);
+  Canvas.prototype.constructor = Canvas;
+  Element.prototype = Object.create(Node.prototype);
+  Element.prototype.constructor = Element;
+  TextNode.prototype = Object.create(Node.prototype);
+  TextNode.prototype.constructor = TextNode;
   Method.prototype = Object.create(Enum.prototype);
   Method.prototype.constructor = Method;
   function app$lambda(it) {
@@ -117,16 +138,313 @@ var app = function (_, Kotlin) {
     }
     return ex(r);
   }
+  function FetchParam() {
+    this.queries = LinkedHashMap_init();
+    this.headers = LinkedHashMap_init();
+    this.method = 'GET';
+  }
+  FetchParam.$metadata$ = {
+    kind: Kind_CLASS,
+    simpleName: 'FetchParam',
+    interfaces: []
+  };
+  function fetch$lambda$lambda(f) {
+    var k = f.component1()
+    , v = f.component2();
+    return k + '=' + v.toString();
+  }
+  function fetch(url, block) {
+    var $receiver = new FetchParam();
+    block($receiver);
+    var tmp$ = window;
+    var tmp$_0 = $receiver.method;
+    var obj = {};
+    var tmp$_1;
+    tmp$_1 = $receiver.headers.entries.iterator();
+    while (tmp$_1.hasNext()) {
+      var element = tmp$_1.next();
+      var k = element.key;
+      var v = element.value;
+      obj[k] = v;
+    }
+    var body = !equals($receiver.method, 'GET') ? joinToString(toList($receiver.queries), '&', void 0, void 0, void 0, void 0, fetch$lambda$lambda) : null;
+    var referrer;
+    var referrerPolicy;
+    var mode;
+    var credentials;
+    var cache;
+    var redirect;
+    var integrity;
+    var keepalive;
+    var window_0;
+    referrer = undefined;
+    referrerPolicy = undefined;
+    mode = undefined;
+    credentials = undefined;
+    cache = undefined;
+    redirect = undefined;
+    integrity = undefined;
+    keepalive = undefined;
+    window_0 = undefined;
+    var o = {};
+    o['method'] = tmp$_0;
+    o['headers'] = obj;
+    o['body'] = body;
+    o['referrer'] = referrer;
+    o['referrerPolicy'] = referrerPolicy;
+    o['mode'] = mode;
+    o['credentials'] = credentials;
+    o['cache'] = cache;
+    o['redirect'] = redirect;
+    o['integrity'] = integrity;
+    o['keepalive'] = keepalive;
+    o['window'] = window_0;
+    return tmp$.fetch(new Request(url, o));
+  }
+  function testFetch$lambda($receiver) {
+    $receiver.headers.put_xwzc9p$('X-Auth', 'kotlin');
+    $receiver.queries.put_xwzc9p$('page', 1);
+    $receiver.method = 'POST';
+    return Unit;
+  }
+  function testFetch$lambda_0(it) {
+    return it.text();
+  }
+  function testFetch$lambda_1(it) {
+    println(it);
+    return Unit;
+  }
+  function testFetch() {
+    fetch('test.json', testFetch$lambda).then(testFetch$lambda_0).then(testFetch$lambda_1);
+  }
+  function El(tagname) {
+    this.tagname = tagname;
+    var tmp$, tmp$_0, tmp$_1;
+    if (equals(this.tagname, 'body')) {
+      tmp$ = document.body;
+      if (tmp$ == null) {
+        throw Kotlin.newThrowable('no body');
+      }
+      tmp$_1 = tmp$;
+    }
+     else
+      tmp$_1 = Kotlin.isType(tmp$_0 = document.createElement(this.tagname), HTMLElement) ? tmp$_0 : throwCCE();
+    this.el = tmp$_1;
+  }
+  Object.defineProperty(El.prototype, 'html', {
+    get: function () {
+      return this.el.innerHTML;
+    },
+    set: function (value) {
+      this.el.innerHTML = value;
+    }
+  });
+  El.prototype.get_61zpoe$ = function (key) {
+    var tmp$;
+    return (tmp$ = this.el.getAttribute(key)) != null ? tmp$ : '';
+  };
+  El.prototype.set_bm4g0d$ = function (key, value) {
+    this.el.setAttribute(key, value.toString());
+  };
+  El.prototype.invoke = function () {
+    return this.el;
+  };
+  El.prototype.plusAssign_1qf$ = function (child) {
+    this.el.appendChild(child.el);
+  };
+  El.prototype.minusAssign_1qf$ = function (child) {
+    this.el.removeChild(child.el);
+  };
+  Object.defineProperty(El.prototype, 'style', {
+    get: function () {
+      return this.el.style;
+    }
+  });
+  El.$metadata$ = {
+    kind: Kind_CLASS,
+    simpleName: 'El',
+    interfaces: []
+  };
+  function Body() {
+    Body_instance = this;
+    El.call(this, 'body');
+  }
+  Body.$metadata$ = {
+    kind: Kind_OBJECT,
+    simpleName: 'Body',
+    interfaces: [El]
+  };
+  var Body_instance = null;
+  function Body_getInstance() {
+    if (Body_instance === null) {
+      new Body();
+    }
+    return Body_instance;
+  }
+  function Div() {
+    El.call(this, 'div');
+  }
+  Div.$metadata$ = {
+    kind: Kind_CLASS,
+    simpleName: 'Div',
+    interfaces: [El]
+  };
+  function H2() {
+    El.call(this, 'h2');
+  }
+  H2.$metadata$ = {
+    kind: Kind_CLASS,
+    simpleName: 'H2',
+    interfaces: [El]
+  };
+  function Canvas() {
+    El.call(this, 'canvas');
+  }
+  Object.defineProperty(Canvas.prototype, 'context', {
+    get: function () {
+      var tmp$, tmp$_0, tmp$_1;
+      return Kotlin.isType(tmp$_1 = (tmp$_0 = Kotlin.isType(tmp$ = this.el, HTMLCanvasElement) ? tmp$ : null) != null ? tmp$_0.getContext('2d') : null, CanvasRenderingContext2D) ? tmp$_1 : null;
+    }
+  });
+  Canvas.$metadata$ = {
+    kind: Kind_CLASS,
+    simpleName: 'Canvas',
+    interfaces: [El]
+  };
+  function htmlBuilder() {
+    var $receiver = new IntRange(0, 5);
+    var destination = ArrayList_init(collectionSizeOrDefault($receiver, 10));
+    var tmp$;
+    tmp$ = $receiver.iterator();
+    while (tmp$.hasNext()) {
+      var item = tmp$.next();
+      var tmp$_0 = destination.add_11rb$;
+      var $receiver_0 = new Div();
+      $receiver_0.html = 'div-' + item;
+      tmp$_0.call(destination, $receiver_0);
+    }
+    var tmp$_1;
+    tmp$_1 = destination.iterator();
+    while (tmp$_1.hasNext()) {
+      var element = tmp$_1.next();
+      Body_getInstance().plusAssign_1qf$(element);
+    }
+    var tmp$_2 = Body_getInstance();
+    var $receiver_1 = new Canvas();
+    var tmp$_3;
+    $receiver_1.set_bm4g0d$('width', 500);
+    $receiver_1.set_bm4g0d$('height', 500);
+    if ((tmp$_3 = $receiver_1.context) != null) {
+      tmp$_3.lineWidth = 10.0;
+      tmp$_3.strokeRect(75.0, 140.0, 150.0, 110.0);
+      tmp$_3.fillRect(130.0, 190.0, 40.0, 60.0);
+      tmp$_3.moveTo(50.0, 140.0);
+      tmp$_3.lineTo(150.0, 60.0);
+      tmp$_3.lineTo(250.0, 140.0);
+      tmp$_3.closePath();
+      tmp$_3.stroke();
+    }
+    tmp$_2.plusAssign_1qf$($receiver_1);
+  }
+  function Node(parent) {
+    this.parent = parent;
+  }
+  Node.$metadata$ = {
+    kind: Kind_CLASS,
+    simpleName: 'Node',
+    interfaces: []
+  };
+  function Element(tagName, parent) {
+    Node.call(this, parent);
+    this.tagName = tagName;
+    this.attributes = LinkedHashMap_init();
+    this.children = ArrayList_init_0();
+  }
+  Element.$metadata$ = {
+    kind: Kind_CLASS,
+    simpleName: 'Element',
+    interfaces: [Node]
+  };
+  function TextNode(text, parent) {
+    Node.call(this, parent);
+    this.text = text;
+  }
+  TextNode.$metadata$ = {
+    kind: Kind_CLASS,
+    simpleName: 'TextNode',
+    interfaces: [Node]
+  };
+  function parseHTML(v) {
+    return parse(new Element('root', null), v);
+  }
+  var rex;
+  function parse(parent, v) {
+    var tmp$, tmp$_0, tmp$_1, tmp$_2;
+    println('parse \u2192 ' + replace(v, '\n', ''));
+    var tmp$_3;
+    if (trim(Kotlin.isCharSequence(tmp$_3 = v) ? tmp$_3 : throwCCE()).toString().length === 0)
+      return parent;
+    if (v.charCodeAt(0) !== 60) {
+      var next = indexOf(v, 60);
+      var endIndex = (tmp$ = next >= 0 ? next : null) != null ? tmp$ : v.length;
+      var text = v.substring(0, endIndex);
+      var tmp$_4;
+      if (!isBlank(trim(Kotlin.isCharSequence(tmp$_4 = text) ? tmp$_4 : throwCCE()).toString())) {
+        var $receiver = (Kotlin.isType(tmp$_0 = parent, Element) ? tmp$_0 : throwCCE()).children;
+        var element = new TextNode(text, parent);
+        $receiver.add_11rb$(element);
+      }
+      return next === -1 ? parent : parse(parent, v.substring(next));
+    }
+     else {
+      if (v.charCodeAt(1) === 47) {
+        var next_0 = indexOf(v.substring(1), 60);
+        return parent.parent == null ? parent : parse(parent.parent, v.substring(next_0));
+      }
+       else {
+        var next_1 = indexOf(v, 62);
+        var matches = ensureNotNull((tmp$_1 = rex.matchEntire_6bul2c$(v.substring(0, next_1))) != null ? tmp$_1.groupValues : null);
+        var el = new Element(matches.get_za3lpa$(1), parent);
+        if (!isBlank(matches.get_za3lpa$(2))) {
+          var $receiver_0 = matches.get_za3lpa$(2);
+          var tmp$_5;
+          var tmp$_6;
+          tmp$_6 = split(trim(Kotlin.isCharSequence(tmp$_5 = $receiver_0) ? tmp$_5 : throwCCE()).toString(), Kotlin.charArrayOf(32)).iterator();
+          while (tmp$_6.hasNext()) {
+            var element_0 = tmp$_6.next();
+            if (contains(element_0, 61)) {
+              var $receiver_1 = split(element_0, Kotlin.charArrayOf(61));
+              var destination = ArrayList_init(collectionSizeOrDefault($receiver_1, 10));
+              var tmp$_7;
+              tmp$_7 = $receiver_1.iterator();
+              while (tmp$_7.hasNext()) {
+                var item = tmp$_7.next();
+                var tmp$_8;
+                destination.add_11rb$(trim(Kotlin.isCharSequence(tmp$_8 = item) ? tmp$_8 : throwCCE()).toString());
+              }
+              var kv = destination;
+              var $receiver_2 = el.attributes;
+              var key = kv.get_za3lpa$(0);
+              var value = replace(kv.get_za3lpa$(1), '"', '');
+              $receiver_2.put_xwzc9p$(key, value);
+            }
+             else {
+              el.attributes.put_xwzc9p$(element_0, 'true');
+            }
+          }
+        }
+        (Kotlin.isType(tmp$_2 = parent, Element) ? tmp$_2 : throwCCE()).children.add_11rb$(el);
+        var isClose = v.charCodeAt(next_1 - 1 | 0) === 47;
+        var tmp$_9 = isClose ? parent : el;
+        var startIndex = next_1 + 1 | 0;
+        return parse(tmp$_9, v.substring(startIndex));
+      }
+    }
+  }
   function main() {
     app();
-    var $receiver = new Test('a', 'b');
-    println($receiver.a + $receiver.b);
-    var $receiver_0 = new MapTest();
-    $receiver_0.set_puj7f4$('name', 'insuk');
-    $receiver_0.job = 'developer';
-    $receiver_0.set_puj7f4$('firstName', 'Choi');
-    $receiver_0.set_puj7f4$('lastName', 'insuk');
-    println(toString($receiver_0.name) + ' , ' + toString($receiver_0.job) + ' , ' + $receiver_0.fullName);
+    htmlBuilder();
+    testFetch();
   }
   function Test(a, b) {
     this.a = a;
@@ -226,9 +544,9 @@ var app = function (_, Kotlin) {
     }
   }
   Method.valueOf_61zpoe$ = Method$valueOf;
-  function Request(url, method, form, timeout, ok, fail) {
+  function Request_0(url, method, form, timeout, ok, fail) {
   }
-  Request.$metadata$ = {
+  Request_0.$metadata$ = {
     kind: Kind_CLASS,
     simpleName: 'Request',
     interfaces: []
@@ -246,7 +564,7 @@ var app = function (_, Kotlin) {
   };
   RequestBuilder.prototype.build = function () {
     var $receiver = this.form_0;
-    return new Request(this.url_0, this.method, !$receiver.isEmpty() ? $receiver : null, this.timeout, this.ok, this.fail);
+    return new Request_0(this.url_0, this.method, !$receiver.isEmpty() ? $receiver : null, this.timeout, this.ok, this.fail);
   };
   RequestBuilder.$metadata$ = {
     kind: Kind_CLASS,
@@ -292,6 +610,30 @@ var app = function (_, Kotlin) {
   });
   _.ex_61zpoe$ = ex;
   _.calc_61zpoe$ = calc;
+  _.FetchParam = FetchParam;
+  _.fetch_1j3ip6$ = fetch;
+  _.testFetch = testFetch;
+  _.El = El;
+  Object.defineProperty(_, 'Body', {
+    get: Body_getInstance
+  });
+  _.Div = Div;
+  _.H2 = H2;
+  _.Canvas = Canvas;
+  _.htmlBuilder = htmlBuilder;
+  _.Node = Node;
+  _.Element = Element;
+  _.TextNode = TextNode;
+  _.parseHTML_61zpoe$ = parseHTML;
+  Object.defineProperty(_, 'rex', {
+    get: function () {
+      return rex;
+    },
+    set: function (value) {
+      rex = value;
+    }
+  });
+  _.parse_o0xlmc$ = parse;
   _.main = main;
   _.Test = Test;
   _.MapTest = MapTest;
@@ -305,7 +647,7 @@ var app = function (_, Kotlin) {
     get: Method$GET_getInstance
   });
   _.Method = Method;
-  _.Request = Request;
+  _.Request = Request_0;
   _.RequestBuilder = RequestBuilder;
   _.RequestBuilder_n78k77$ = RequestBuilder_0;
   Object.defineProperty(_, 'request', {
@@ -316,6 +658,7 @@ var app = function (_, Kotlin) {
   cleanUp = Regex_init('[^.\\d-+*\\/]');
   multDiv = Regex_init('((?:\\+-)?[.\\d]+)([*\\/])((?:\\+-)?[.\\d]+)');
   paren = Regex_init('\\(([^()]*)\\)');
+  rex = Regex_init('<([a-zA-Z0-9]+)((?:\\s+[a-zA-Z-]+(?:\\s*=\\s*"[^"]*")?)*)\\s*/?');
   request = RequestBuilder_0('http://api.com', request$lambda);
   main();
   Kotlin.defineModule('app', _);

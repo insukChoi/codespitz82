@@ -1437,6 +1437,25 @@
     function asSequence_8($receiver) {
       return new Sequence$ObjectLiteral(asSequence$lambda_8($receiver));
     }
+    function toList_9($receiver) {
+      if ($receiver.size === 0)
+        return emptyList();
+      var iterator = $receiver.entries.iterator();
+      if (!iterator.hasNext())
+        return emptyList();
+      var first = iterator.next();
+      if (!iterator.hasNext()) {
+        return listOf(new Pair(first.key, first.value));
+      }
+      var result = ArrayList_init_0($receiver.size);
+      result.add_11rb$(new Pair(first.key, first.value));
+      do {
+        var $receiver_0 = iterator.next();
+        result.add_11rb$(new Pair($receiver_0.key, $receiver_0.value));
+      }
+       while (iterator.hasNext());
+      return result;
+    }
     function downTo_4($receiver, to) {
       return IntProgression$Companion_getInstance().fromClosedRange_qt1dr2$($receiver, to, -1);
     }
@@ -2178,6 +2197,20 @@
        else {
         instance.stack = (new Error()).stack;
       }
+    }
+    function newThrowable(message, cause) {
+      var tmp$;
+      var throwable = new Error();
+      if (equals(typeof message, 'undefined')) {
+        tmp$ = cause != null ? cause.toString() : null;
+      }
+       else {
+        tmp$ = message;
+      }
+      throwable.message = tmp$;
+      throwable.cause = cause;
+      throwable.name = 'Throwable';
+      return throwable;
     }
     function BoxedChar(c) {
       this.c = c;
@@ -3679,9 +3712,6 @@
     function Serializable() {
     }
     Serializable.$metadata$ = {kind: Kind_INTERFACE, simpleName: 'Serializable', interfaces: []};
-    function lazy(initializer) {
-      return new UnsafeLazyImpl(initializer);
-    }
     function toDouble($receiver) {
       var $receiver_0 = +$receiver;
       if (isNaN_1($receiver_0) && !isNaN_0($receiver) || ($receiver_0 === 0.0 && isBlank($receiver)))
@@ -6008,58 +6038,10 @@
     MatchResult$Destructured.$metadata$ = {kind: Kind_CLASS, simpleName: 'Destructured', interfaces: []};
     MatchResult.$metadata$ = {kind: Kind_INTERFACE, simpleName: 'MatchResult', interfaces: []};
     var KotlinVersion$Companion_instance = null;
-    function Lazy() {
-    }
-    Lazy.$metadata$ = {kind: Kind_INTERFACE, simpleName: 'Lazy', interfaces: []};
     var LazyThreadSafetyMode$SYNCHRONIZED_instance;
     var LazyThreadSafetyMode$PUBLICATION_instance;
     var LazyThreadSafetyMode$NONE_instance;
-    function UNINITIALIZED_VALUE() {
-      UNINITIALIZED_VALUE_instance = this;
-    }
-    UNINITIALIZED_VALUE.$metadata$ = {kind: Kind_OBJECT, simpleName: 'UNINITIALIZED_VALUE', interfaces: []};
     var UNINITIALIZED_VALUE_instance = null;
-    function UNINITIALIZED_VALUE_getInstance() {
-      if (UNINITIALIZED_VALUE_instance === null) {
-        new UNINITIALIZED_VALUE();
-      }
-      return UNINITIALIZED_VALUE_instance;
-    }
-    function UnsafeLazyImpl(initializer) {
-      this.initializer_0 = initializer;
-      this._value_0 = UNINITIALIZED_VALUE_getInstance();
-    }
-    Object.defineProperty(UnsafeLazyImpl.prototype, 'value', {get: function () {
-      var tmp$;
-      if (this._value_0 === UNINITIALIZED_VALUE_getInstance()) {
-        this._value_0 = ensureNotNull(this.initializer_0)();
-        this.initializer_0 = null;
-      }
-      return (tmp$ = this._value_0) == null || Kotlin.isType(tmp$, Any) ? tmp$ : throwCCE_0();
-    }});
-    UnsafeLazyImpl.prototype.isInitialized = function () {
-      return this._value_0 !== UNINITIALIZED_VALUE_getInstance();
-    };
-    UnsafeLazyImpl.prototype.toString = function () {
-      return this.isInitialized() ? toString(this.value) : 'Lazy value not initialized yet.';
-    };
-    UnsafeLazyImpl.prototype.writeReplace_0 = function () {
-      return new InitializedLazyImpl(this.value);
-    };
-    UnsafeLazyImpl.$metadata$ = {kind: Kind_CLASS, simpleName: 'UnsafeLazyImpl', interfaces: [Serializable, Lazy]};
-    function InitializedLazyImpl(value) {
-      this.value_7taq70$_0 = value;
-    }
-    Object.defineProperty(InitializedLazyImpl.prototype, 'value', {get: function () {
-      return this.value_7taq70$_0;
-    }});
-    InitializedLazyImpl.prototype.isInitialized = function () {
-      return true;
-    };
-    InitializedLazyImpl.prototype.toString = function () {
-      return toString(this.value);
-    };
-    InitializedLazyImpl.$metadata$ = {kind: Kind_CLASS, simpleName: 'InitializedLazyImpl', interfaces: [Serializable, Lazy]};
     function Result(value) {
       Result$Companion_getInstance();
       this.value = value;
@@ -6225,6 +6207,7 @@
     package$collections.joinTo_gcc71v$ = joinTo_8;
     package$collections.joinToString_fmv235$ = joinToString_8;
     package$collections.asSequence_7wnvza$ = asSequence_8;
+    package$collections.toList_abgq59$ = toList_9;
     package$ranges.downTo_dqglrj$ = downTo_4;
     package$ranges.reversed_zf1xzc$ = reversed_9;
     package$ranges.until_dqglrj$ = until_4;
@@ -6314,6 +6297,7 @@
     _.longArrayIterator = longArrayIterator;
     _.subSequence = subSequence;
     _.captureStack = captureStack;
+    _.newThrowable = newThrowable;
     _.BoxedChar = BoxedChar;
     _.charArrayOf = charArrayOf;
     package$collections.copyToArray = copyToArray;
@@ -6381,7 +6365,6 @@
     package$kotlin.NoSuchElementException_init = NoSuchElementException_init;
     package$kotlin.NoSuchElementException = NoSuchElementException;
     package$io.Serializable = Serializable;
-    package$kotlin.lazy_klfg04$ = lazy;
     package$text.toDouble_pdl1vz$ = toDouble;
     package$kotlin.isNaN_yrwdxr$ = isNaN_1;
     package$js.get_js_1yb8b7$ = get_js;
@@ -6465,10 +6448,6 @@
     package$text.MatchGroupCollection = MatchGroupCollection;
     MatchResult.Destructured = MatchResult$Destructured;
     package$text.MatchResult = MatchResult;
-    package$kotlin.Lazy = Lazy;
-    Object.defineProperty(package$kotlin, 'UNINITIALIZED_VALUE', {get: UNINITIALIZED_VALUE_getInstance});
-    package$kotlin.UnsafeLazyImpl = UnsafeLazyImpl;
-    package$kotlin.InitializedLazyImpl = InitializedLazyImpl;
     package$kotlin.createFailure_tcv7n7$ = createFailure;
     Object.defineProperty(Result, 'Companion', {get: Result$Companion_getInstance});
     Result.Failure = Result$Failure;
