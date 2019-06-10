@@ -1942,9 +1942,6 @@
     var KVisibility$PROTECTED_instance;
     var KVisibility$INTERNAL_instance;
     var KVisibility$PRIVATE_instance;
-    function asList($receiver) {
-      return new ArrayList($receiver);
-    }
     function copyOfRange_3($receiver, fromIndex, toIndex) {
       AbstractList$Companion_getInstance().checkRangeIndexes_cub51b$(fromIndex, toIndex, $receiver.length);
       return $receiver.slice(fromIndex, toIndex);
@@ -3682,6 +3679,9 @@
     function Serializable() {
     }
     Serializable.$metadata$ = {kind: Kind_INTERFACE, simpleName: 'Serializable', interfaces: []};
+    function lazy(initializer) {
+      return new UnsafeLazyImpl(initializer);
+    }
     function toDouble($receiver) {
       var $receiver_0 = +$receiver;
       if (isNaN_1($receiver_0) && !isNaN_0($receiver) || ($receiver_0 === 0.0 && isBlank($receiver)))
@@ -4983,9 +4983,6 @@
     function emptyList() {
       return EmptyList_getInstance();
     }
-    function listOf_0(elements) {
-      return elements.length > 0 ? asList(elements) : emptyList();
-    }
     function arrayListOf_0(elements) {
       return elements.length === 0 ? ArrayList_init() : ArrayList_init_1(new ArrayAsCollection(elements, true));
     }
@@ -6011,10 +6008,58 @@
     MatchResult$Destructured.$metadata$ = {kind: Kind_CLASS, simpleName: 'Destructured', interfaces: []};
     MatchResult.$metadata$ = {kind: Kind_INTERFACE, simpleName: 'MatchResult', interfaces: []};
     var KotlinVersion$Companion_instance = null;
+    function Lazy() {
+    }
+    Lazy.$metadata$ = {kind: Kind_INTERFACE, simpleName: 'Lazy', interfaces: []};
     var LazyThreadSafetyMode$SYNCHRONIZED_instance;
     var LazyThreadSafetyMode$PUBLICATION_instance;
     var LazyThreadSafetyMode$NONE_instance;
+    function UNINITIALIZED_VALUE() {
+      UNINITIALIZED_VALUE_instance = this;
+    }
+    UNINITIALIZED_VALUE.$metadata$ = {kind: Kind_OBJECT, simpleName: 'UNINITIALIZED_VALUE', interfaces: []};
     var UNINITIALIZED_VALUE_instance = null;
+    function UNINITIALIZED_VALUE_getInstance() {
+      if (UNINITIALIZED_VALUE_instance === null) {
+        new UNINITIALIZED_VALUE();
+      }
+      return UNINITIALIZED_VALUE_instance;
+    }
+    function UnsafeLazyImpl(initializer) {
+      this.initializer_0 = initializer;
+      this._value_0 = UNINITIALIZED_VALUE_getInstance();
+    }
+    Object.defineProperty(UnsafeLazyImpl.prototype, 'value', {get: function () {
+      var tmp$;
+      if (this._value_0 === UNINITIALIZED_VALUE_getInstance()) {
+        this._value_0 = ensureNotNull(this.initializer_0)();
+        this.initializer_0 = null;
+      }
+      return (tmp$ = this._value_0) == null || Kotlin.isType(tmp$, Any) ? tmp$ : throwCCE_0();
+    }});
+    UnsafeLazyImpl.prototype.isInitialized = function () {
+      return this._value_0 !== UNINITIALIZED_VALUE_getInstance();
+    };
+    UnsafeLazyImpl.prototype.toString = function () {
+      return this.isInitialized() ? toString(this.value) : 'Lazy value not initialized yet.';
+    };
+    UnsafeLazyImpl.prototype.writeReplace_0 = function () {
+      return new InitializedLazyImpl(this.value);
+    };
+    UnsafeLazyImpl.$metadata$ = {kind: Kind_CLASS, simpleName: 'UnsafeLazyImpl', interfaces: [Serializable, Lazy]};
+    function InitializedLazyImpl(value) {
+      this.value_7taq70$_0 = value;
+    }
+    Object.defineProperty(InitializedLazyImpl.prototype, 'value', {get: function () {
+      return this.value_7taq70$_0;
+    }});
+    InitializedLazyImpl.prototype.isInitialized = function () {
+      return true;
+    };
+    InitializedLazyImpl.prototype.toString = function () {
+      return toString(this.value);
+    };
+    InitializedLazyImpl.$metadata$ = {kind: Kind_CLASS, simpleName: 'InitializedLazyImpl', interfaces: [Serializable, Lazy]};
     function Result(value) {
       Result$Companion_getInstance();
       this.value = value;
@@ -6254,7 +6299,6 @@
     package$reflect.KProperty1 = KProperty1;
     KMutableProperty1.Setter = KMutableProperty1$Setter;
     package$reflect.KMutableProperty1 = KMutableProperty1;
-    package$collections.asList_us0mfu$ = asList;
     package$collections.copyOfRange_5f8l3u$ = copyOfRange_3;
     package$collections.reverse_vvxzk3$ = reverse_12;
     package$kotlin.Comparator = Comparator;
@@ -6337,6 +6381,7 @@
     package$kotlin.NoSuchElementException_init = NoSuchElementException_init;
     package$kotlin.NoSuchElementException = NoSuchElementException;
     package$io.Serializable = Serializable;
+    package$kotlin.lazy_klfg04$ = lazy;
     package$text.toDouble_pdl1vz$ = toDouble;
     package$kotlin.isNaN_yrwdxr$ = isNaN_1;
     package$js.get_js_1yb8b7$ = get_js;
@@ -6371,7 +6416,6 @@
     package$collections.AbstractSet = AbstractSet;
     Object.defineProperty(package$collections, 'EmptyIterator', {get: EmptyIterator_getInstance});
     Object.defineProperty(package$collections, 'EmptyList', {get: EmptyList_getInstance});
-    package$collections.listOf_i5x0yv$ = listOf_0;
     package$collections.arrayListOf_i5x0yv$ = arrayListOf_0;
     package$collections.get_indices_gzk92b$ = get_indices_12;
     package$collections.optimizeReadOnlyList_qzupvv$ = optimizeReadOnlyList;
@@ -6421,6 +6465,10 @@
     package$text.MatchGroupCollection = MatchGroupCollection;
     MatchResult.Destructured = MatchResult$Destructured;
     package$text.MatchResult = MatchResult;
+    package$kotlin.Lazy = Lazy;
+    Object.defineProperty(package$kotlin, 'UNINITIALIZED_VALUE', {get: UNINITIALIZED_VALUE_getInstance});
+    package$kotlin.UnsafeLazyImpl = UnsafeLazyImpl;
+    package$kotlin.InitializedLazyImpl = InitializedLazyImpl;
     package$kotlin.createFailure_tcv7n7$ = createFailure;
     Object.defineProperty(Result, 'Companion', {get: Result$Companion_getInstance});
     Result.Failure = Result$Failure;
